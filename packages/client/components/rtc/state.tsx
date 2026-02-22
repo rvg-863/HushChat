@@ -10,7 +10,7 @@ import {
 import { RoomContext } from "solid-livekit-components";
 
 import { Room } from "livekit-client";
-import { Channel } from "stoat.js";
+import { Channel } from "hushchat.js";
 
 import { useState } from "@revolt/state";
 import { Voice as VoiceSettings } from "@revolt/state/stores/Voice";

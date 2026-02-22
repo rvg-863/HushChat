@@ -2,7 +2,7 @@ import { Match, Show, Switch, createEffect, createMemo, on } from "solid-js";
 
 import { useLingui } from "@lingui-solid/solid/macro";
 import { VirtualContainer } from "@minht11/solid-virtual-container";
-import { Channel, ServerMember, User } from "stoat.js";
+import { Channel, ServerMember, User } from "hushchat.js";
 import { styled } from "styled-system/jsx";
 
 import { floatingUserMenus } from "@revolt/app/menus/UserContextMenu";

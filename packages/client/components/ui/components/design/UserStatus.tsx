@@ -1,4 +1,4 @@
-import type { API } from "stoat.js";
+import type { API } from "hushchat.js";
 
 export type Props = {
   /**

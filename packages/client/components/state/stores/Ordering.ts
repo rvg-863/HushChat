@@ -1,4 +1,4 @@
-import { Client } from "stoat.js";
+import { Client } from "hushchat.js";
 
 import { State } from "..";
 

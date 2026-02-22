@@ -1,5 +1,5 @@
 import { useLingui } from "@lingui-solid/solid/macro";
-import { API } from "stoat.js";
+import { API } from "hushchat.js";
 
 /**
  * Translate any error
@@ -148,7 +148,7 @@ export function useError() {
           return err.type + " " + err.location;
 
         default:
-          return t`Uncaught Stoat error: ${err.type}`;
+          return t`Uncaught HushChat error: ${err.type}`;
       }
     }
 

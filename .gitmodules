@@ -1,5 +1,5 @@
 [submodule "packages/stoat.js"]
-	path = packages/stoat.js
+	path = packages/hushchat.js
 	url = https://github.com/stoatchat/javascript-client-sdk
 [submodule "packages/client/assets"]
 	path = packages/client/assets

@@ -1,6 +1,6 @@
 import { Accessor, Setter, batch, createSignal } from "solid-js";
 
-import { API, Channel, Client, Message } from "stoat.js";
+import { API, Channel, Client, Message } from "hushchat.js";
 import { ulid } from "ulid";
 
 import { CONFIGURATION, insecureUniqueId } from "@revolt/common";

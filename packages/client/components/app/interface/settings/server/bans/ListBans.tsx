@@ -2,7 +2,7 @@ import { For, Match, Switch, createMemo, createSignal } from "solid-js";
 
 import { useLingui } from "@lingui-solid/solid/macro";
 import { useQuery, useQueryClient } from "@tanstack/solid-query";
-import { Server, ServerBan } from "stoat.js";
+import { Server, ServerBan } from "hushchat.js";
 
 import { useModals } from "@revolt/modal";
 import {

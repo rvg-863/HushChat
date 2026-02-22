@@ -2,7 +2,7 @@ import { For, Show } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
 import dayjs from "dayjs";
-import { Server } from "stoat.js";
+import { Server } from "hushchat.js";
 
 import { useClient } from "@revolt/client";
 import { useModals } from "@revolt/modal";
@@ -111,11 +111,11 @@ export function ServerContextMenu(props: { server: Server }) {
   }
 
   /**
-   * Open server in Stoat Admin Panel
+   * Open server in HushChat Admin Panel
    */
   function openAdminPanel() {
     window.open(
-      `https://old-admin.stoatinternal.com/panel/inspect/server/${props.server.id}`,
+      `https://old-admin.hushchatinternal.com/panel/inspect/server/${props.server.id}`,
       "_blank",
     );
   }

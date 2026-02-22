@@ -17,7 +17,7 @@ import { CONFIGURATION } from "@revolt/common";
 import { useModals } from "@revolt/modal";
 import { useNavigate } from "@solidjs/router";
 import { Match, Switch } from "solid-js";
-import { PublicChannelInvite } from "stoat.js";
+import { PublicChannelInvite } from "hushchat.js";
 
 /**
  * Feedback
@@ -27,7 +27,7 @@ export function Feedback() {
   const navigate = useNavigate();
   const client = useClient();
 
-  const showLoungeButton = CONFIGURATION.IS_STOAT;
+  const showLoungeButton = CONFIGURATION.IS_HUSHCHAT;
   const isInLounge =
     client()!.servers.get("01F7ZSBSFHQ8TA81725KQCSDDP") !== undefined;
 
@@ -48,7 +48,7 @@ export function Feedback() {
           </CategoryButton>
         </Link> */}
         <Link
-          href="https://github.com/orgs/stoatchat/discussions/categories/feature-suggestions"
+          href="https://github.com/orgs/hushchat/discussions/categories/feature-suggestions"
           target="_blank"
         >
           <CategoryButton
@@ -56,14 +56,14 @@ export function Feedback() {
             icon={<MdStar {...iconSize(22)} />}
             onClick={() => void 0}
             description={
-              <Trans>Suggest new Stoat features on GitHub discussions.</Trans>
+              <Trans>Suggest new HushChat features on GitHub discussions.</Trans>
             }
           >
             <Trans>Submit feature suggestion</Trans>
           </CategoryButton>
         </Link>
         <Link
-          href="https://github.com/orgs/stoatchat/discussions/categories/feedback"
+          href="https://github.com/orgs/hushchat/discussions/categories/feedback"
           target="_blank"
         >
           <CategoryButton
@@ -76,7 +76,7 @@ export function Feedback() {
           </CategoryButton>
         </Link>
         <Link
-          href="https://github.com/stoatchat/for-web/issues?q=is%3Aissue%20state%3Aopen%20type%3ABug"
+          href="https://github.com/hushchat/for-web/issues?q=is%3Aissue%20state%3Aopen%20type%3ABug"
           target="_blank"
         >
           <CategoryButton
@@ -103,7 +103,7 @@ export function Feedback() {
               }
               icon={<MdGroups3 />}
             >
-              <Trans>Go to the Stoat Lounge</Trans>
+              <Trans>Go to the HushChat Lounge</Trans>
             </CategoryButton>
           </Match>
           <Match when={showLoungeButton && !isInLounge}>
@@ -122,7 +122,7 @@ export function Feedback() {
               }
               icon={<MdGroups3 />}
             >
-              <Trans>Join the Stoat Lounge</Trans>
+              <Trans>Join the HushChat Lounge</Trans>
             </CategoryButton>
           </Match>
         </Switch>

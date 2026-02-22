@@ -1,7 +1,7 @@
 import { JSX, Match, Show, Switch } from "solid-js";
 
 import { useLingui } from "@lingui-solid/solid/macro";
-import { Message } from "stoat.js";
+import { Message } from "hushchat.js";
 import { cva } from "styled-system/css";
 import { styled } from "styled-system/jsx";
 

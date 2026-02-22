@@ -10,7 +10,7 @@ import {
 } from "solid-js";
 
 import { useLingui } from "@lingui-solid/solid/macro";
-import type { API, Channel, Server, ServerFlags } from "stoat.js";
+import type { API, Channel, Server, ServerFlags } from "hushchat.js";
 import { styled } from "styled-system/jsx";
 
 import { KeybindAction, createKeybind } from "@revolt/keybinds";

@@ -1,6 +1,6 @@
 import { Component, JSX, Match, Show, Switch, createMemo } from "solid-js";
 
-import { Channel, Server as ServerI } from "stoat.js";
+import { Channel, Server as ServerI } from "hushchat.js";
 
 import {
   CategoryContextMenu,

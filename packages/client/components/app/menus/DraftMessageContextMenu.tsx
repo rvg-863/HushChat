@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
-import { Channel } from "stoat.js";
+import { Channel } from "hushchat.js";
 
 import { useClient } from "@revolt/client";
 import { useState } from "@revolt/state";

@@ -9,7 +9,7 @@ import {
 } from "solid-icons/bi";
 
 import { Trans, useLingui } from "@lingui-solid/solid/macro";
-import { Server } from "stoat.js";
+import { Server } from "hushchat.js";
 
 import { useUser } from "@revolt/client";
 import { TextWithEmoji } from "@revolt/markdown";

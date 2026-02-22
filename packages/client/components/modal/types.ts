@@ -17,8 +17,8 @@ import {
   Session,
   User,
   VideoEmbed,
-} from "stoat.js";
-import { ProtocolV1 } from "stoat.js/lib/events/v1";
+} from "hushchat.js";
+import { ProtocolV1 } from "hushchat.js/lib/events/v1";
 
 import type { SettingsConfigurations } from "@revolt/app";
 import { CategoryData } from "@revolt/app/menus/CategoryContextMenu";

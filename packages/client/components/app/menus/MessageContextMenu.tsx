@@ -1,7 +1,7 @@
 import { For, Match, Show, Switch } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
-import { File, Message } from "stoat.js";
+import { File, Message } from "hushchat.js";
 
 import { useClient, useUser } from "@revolt/client";
 import { CustomEmoji, UnicodeEmoji } from "@revolt/markdown/emoji";
@@ -88,11 +88,11 @@ export function MessageContextMenu(props: { message?: Message; file?: File }) {
   }
 
   /**
-   * Open message in Stoat Admin Panel
+   * Open message in HushChat Admin Panel
    */
   function openAdminPanel() {
     window.open(
-      `https://old-admin.stoatinternal.com/panel/inspect/message/${props.message!.id}`,
+      `https://old-admin.hushchatinternal.com/panel/inspect/message/${props.message!.id}`,
       "_blank",
     );
   }

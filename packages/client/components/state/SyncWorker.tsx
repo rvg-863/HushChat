@@ -1,6 +1,6 @@
 import { createEffect, on, onCleanup } from "solid-js";
 
-import { ProtocolV1 } from "stoat.js/lib/events/v1";
+import { ProtocolV1 } from "hushchat.js/lib/events/v1";
 
 import { useClient } from "@revolt/client";
 

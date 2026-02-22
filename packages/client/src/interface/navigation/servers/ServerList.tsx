@@ -1,7 +1,7 @@
 import { Accessor, For, JSX, Show, createMemo, createSignal } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
-import { Channel, Server, User } from "stoat.js";
+import { Channel, Server, User } from "hushchat.js";
 import { cva } from "styled-system/css";
 import { styled } from "styled-system/jsx";
 
@@ -302,7 +302,7 @@ export const ServerList = (props: Props) => {
             <Avatar size={42} fallback={<MdAdd />} />
           </a>
         </Tooltip>
-        <Show when={CONFIGURATION.IS_STOAT}>
+        <Show when={CONFIGURATION.IS_HUSHCHAT}>
           <Tooltip placement="right" content={"Find new servers to join"}>
             <a
               href={state.layout.getLastActiveDiscoverPath()}

@@ -1,6 +1,6 @@
 import { createSignal, onCleanup } from "solid-js";
 
-import { PublicBot, PublicChannelInvite } from "stoat.js";
+import { PublicBot, PublicChannelInvite } from "hushchat.js";
 import { styled } from "styled-system/jsx";
 
 import { useClient } from "@revolt/client";

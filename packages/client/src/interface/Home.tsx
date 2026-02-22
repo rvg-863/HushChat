@@ -1,7 +1,7 @@
 import { Match, Show, Switch } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
-import { PublicChannelInvite } from "stoat.js";
+import { PublicChannelInvite } from "hushchat.js";
 import { css, cva } from "styled-system/css";
 import { styled } from "styled-system/jsx";
 
@@ -95,8 +95,8 @@ export function HomePage() {
   const navigate = useNavigate();
   const client = useClient();
 
-  // check if we're stoat.chat; if so, check if the user is in the Lounge
-  const showLoungeButton = CONFIGURATION.IS_STOAT;
+  // check if we're hushchat.chat; if so, check if the user is in the Lounge
+  const showLoungeButton = CONFIGURATION.IS_HUSHCHAT;
   const isInLounge =
     client()!.servers.get("01F7ZSBSFHQ8TA81725KQCSDDP") !== undefined;
 
@@ -148,7 +148,7 @@ export function HomePage() {
                   }
                   icon={<MdGroups3 />}
                 >
-                  <Trans>Go to the Stoat Lounge</Trans>
+                  <Trans>Go to the HushChat Lounge</Trans>
                 </CategoryButton>
               </Match>
               <Match when={showLoungeButton && !isInLounge}>
@@ -169,7 +169,7 @@ export function HomePage() {
                   }
                   icon={<MdGroups3 />}
                 >
-                  <Trans>Join the Stoat Lounge</Trans>
+                  <Trans>Join the HushChat Lounge</Trans>
                 </CategoryButton>
               </Match>
             </Switch>
@@ -185,11 +185,11 @@ export function HomePage() {
               }
               icon={<MdPayments />}
             >
-              <Trans>Donate to Stoat</Trans>
+              <Trans>Donate to HushChat</Trans>
             </CategoryButton>
           </SeparatedColumn>
           <SeparatedColumn>
-            <Show when={CONFIGURATION.IS_STOAT}>
+            <Show when={CONFIGURATION.IS_HUSHCHAT}>
               <CategoryButton
                 onClick={() => navigate("/discover")}
                 description={
@@ -199,7 +199,7 @@ export function HomePage() {
                 }
                 icon={<MdExplore />}
               >
-                <Trans>Discover Stoat</Trans>
+                <Trans>Discover HushChat</Trans>
               </CategoryButton>
             </Show>
             <CategoryButton
@@ -217,7 +217,7 @@ export function HomePage() {
               }
               icon={<MdRateReview {...iconSize(22)} />}
             >
-              <Trans>Give feedback on Stoat</Trans>
+              <Trans>Give feedback on HushChat</Trans>
             </CategoryButton>
             <CategoryButton
               onClick={() => openModal({ type: "settings", config: "user" })}

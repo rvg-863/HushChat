@@ -1,7 +1,7 @@
 import { Match, Show, Switch } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
-import { Channel } from "stoat.js";
+import { Channel } from "hushchat.js";
 
 import { useModals } from "@revolt/modal";
 import { useState } from "@revolt/state";
@@ -79,11 +79,11 @@ export function ChannelContextMenu(props: { channel: Channel }) {
   }
 
   /**
-   * Open channel in Stoat Admin Panel
+   * Open channel in HushChat Admin Panel
    */
   function openAdminPanel() {
     window.open(
-      `https://old-admin.stoatinternal.com/panel/inspect/channel/${props.channel.id}`,
+      `https://old-admin.hushchatinternal.com/panel/inspect/channel/${props.channel.id}`,
       "_blank",
     );
   }

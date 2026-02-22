@@ -11,7 +11,7 @@ import {
 
 import { Trans, useLingui } from "@lingui-solid/solid/macro";
 import { VirtualContainer } from "@minht11/solid-virtual-container";
-import type { User } from "stoat.js";
+import type { User } from "hushchat.js";
 import { styled } from "styled-system/jsx";
 
 import { UserContextMenu } from "@revolt/app";

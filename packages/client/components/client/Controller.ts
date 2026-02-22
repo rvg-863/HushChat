@@ -1,8 +1,8 @@
 import { Accessor, Setter, createSignal } from "solid-js";
 
 import { detect } from "detect-browser";
-import { API, Client, ConnectionState } from "stoat.js";
-import { ProtocolV1 } from "stoat.js/lib/events/v1";
+import { API, Client, ConnectionState } from "hushchat.js";
+import { ProtocolV1 } from "hushchat.js/lib/events/v1";
 
 import { CONFIGURATION } from "@revolt/common";
 import { ModalControllerExtended } from "@revolt/modal";
@@ -510,9 +510,9 @@ export default class ClientController {
         os = "iPadOS";
       }
 
-      friendly_name = `Stoat for Web (${name} on ${os})`;
+      friendly_name = `HushChat for Web (${name} on ${os})`;
     } else {
-      friendly_name = "Stoat for Web (Unknown Device)";
+      friendly_name = "HushChat for Web (Unknown Device)";
     }
 
     // Try to login with given credentials

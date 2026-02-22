@@ -2,7 +2,7 @@ import { BiSolidFile } from "solid-icons/bi";
 import { Match, Show, Switch } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
-import { type Message } from "stoat.js";
+import { type Message } from "hushchat.js";
 import { cva } from "styled-system/css";
 import { styled } from "styled-system/jsx";
 

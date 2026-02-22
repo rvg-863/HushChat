@@ -148,11 +148,11 @@ export function AuthPage(props: { children: JSX.Element }) {
         <Nav>
           <NavItems variant="stack">
             <NavItems>
-              <LinkWithIcon href="https://github.com/stoatchat" target="_blank">
+              <LinkWithIcon href="https://github.com/hushchat" target="_blank">
                 <BiLogosGithub size={24} />
               </LinkWithIcon>
               <LinkWithIcon
-                href="https://bsky.app/profile/stoat.chat"
+                href="https://bsky.app/profile/hushchat.chat"
                 target="_blank"
               >
                 <img
@@ -163,13 +163,13 @@ export function AuthPage(props: { children: JSX.Element }) {
             </NavItems>
             <Bullet />
             <NavItems>
-              <a href="https://stoat.chat/about" target="_blank">
+              <a href="https://hushchat.chat/about" target="_blank">
                 <Trans>About</Trans>
               </a>
-              <a href="https://stoat.chat/terms" target="_blank">
+              <a href="https://hushchat.chat/terms" target="_blank">
                 <Trans>Terms of Service</Trans>
               </a>
-              <a href="https://stoat.chat/privacy" target="_blank">
+              <a href="https://hushchat.chat/privacy" target="_blank">
                 <Trans>Privacy Policy</Trans>
               </a>
             </NavItems>

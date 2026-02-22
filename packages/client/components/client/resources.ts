@@ -1,5 +1,5 @@
 import { createQuery } from "@tanstack/solid-query";
-import { User } from "stoat.js";
+import { User } from "hushchat.js";
 
 import { useClient } from ".";
 
