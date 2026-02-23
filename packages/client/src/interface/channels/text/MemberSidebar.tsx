@@ -1,4 +1,4 @@
-import { Match, Show, Switch, createEffect, createMemo, on } from "solid-js";
+import { Match, Show, Switch, createEffect, createMemo, createSignal, on } from "solid-js";
 
 import { useLingui } from "@lingui-solid/solid/macro";
 import { VirtualContainer } from "@minht11/solid-virtual-container";
@@ -11,6 +11,8 @@ import { TextWithEmoji } from "@revolt/markdown";
 import { userInformation } from "@revolt/markdown/users";
 import {
   Avatar,
+  Button,
+  CircularProgress,
   Deferred,
   MenuButton,
   OverflowingText,
@@ -75,16 +77,26 @@ const LARGE_SERVERS = [
  */
 export function ServerMemberSidebar(props: Props) {
   const client = useClient();
+  const [loading, setLoading] = createSignal(false);
+
+  /**
+   * Sync members with an optional full load (no limit)
+   * @param exclude Whether to exclude offline members
+   * @param limit Member limit (omit for full load)
+   */
+  function doSyncMembers(exclude: boolean, limit?: number) {
+    setLoading(true);
+    props.channel.server
+      ?.syncMembers(exclude, limit)
+      .finally(() => setLoading(false));
+  }
 
   // todo: useQuery
   createEffect(
     on(
       () => props.channel.serverId,
       (serverId) =>
-        props.channel.server?.syncMembers(
-          LARGE_SERVERS.includes(serverId) ? true : false,
-          200,
-        ),
+        doSyncMembers(LARGE_SERVERS.includes(serverId), 200),
     ),
   );
 
@@ -242,12 +254,35 @@ export function ServerMemberSidebar(props: Props) {
 
   return (
     <Container>
+      <Show when={loading()}>
+        <MemberTitle>
+          <CircularProgress />
+        </MemberTitle>
+      </Show>
       <Show when={!LARGE_SERVERS.includes(props.channel.serverId)}>
         <MemberTitle bottomMargin="yes">
           <Row align>
             <UserStatus size="0.7em" status="Online" />
             {onlineMembers()} members online
           </Row>
+        </MemberTitle>
+      </Show>
+      <Show
+        when={
+          !loading() &&
+          client().serverMembers.filter(
+            (m) => m.id.server === props.channel.serverId,
+          ).length === 200
+        }
+      >
+        <MemberTitle>
+          <Button
+            size="sm"
+            variant="tonal"
+            onPress={() => doSyncMembers(false)}
+          >
+            Load all members
+          </Button>
         </MemberTitle>
       </Show>
 

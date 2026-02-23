@@ -1,16 +1,16 @@
+import { Show } from "solid-js";
 import { createFormControl, createFormGroup } from "solid-forms";
 
 import { Trans, useLingui } from "@lingui-solid/solid/macro";
 
-import { Column, Dialog, DialogProps, Form2 } from "@revolt/ui";
+import { UnicodeEmoji } from "@revolt/markdown/emoji";
+import { Column, Dialog, DialogProps, Form2, Text } from "@revolt/ui";
 
 import { useModals } from "..";
 import { Modals } from "../types";
 
-// TODO: port the onboarding modal design
-
 /**
- * Modal to pick a new username
+ * Modal to pick a new username during onboarding
  */
 export function OnboardingModal(
   props: DialogProps & Modals & { type: "onboarding" },
@@ -19,7 +19,11 @@ export function OnboardingModal(
   const { showError } = useModals();
 
   const group = createFormGroup({
-    username: createFormControl("", { required: true }),
+    username: createFormControl("", {
+      required: true,
+      validators: (value: string) =>
+        value.length >= 2 ? null : { minLength: true },
+    }),
   });
 
   async function onSubmit() {
@@ -37,11 +41,11 @@ export function OnboardingModal(
     <Dialog
       show={props.show}
       onClose={props.onClose}
-      title={<Trans>Choose username</Trans>}
+      title={<Trans>Welcome to HushChat!</Trans>}
       actions={[
         { text: <Trans>Cancel</Trans> },
         {
-          text: <Trans>Good</Trans>,
+          text: <Trans>Get started</Trans>,
           onClick: () => {
             onSubmit();
             return false;
@@ -53,11 +57,24 @@ export function OnboardingModal(
     >
       <form onSubmit={submit}>
         <Column>
+          <Text>
+            <UnicodeEmoji emoji="👋" />{" "}
+            <Trans>
+              Pick a username that others will use to find you. You can change
+              this later in settings.
+            </Trans>
+          </Text>
           <Form2.TextField
             name="username"
             control={group.controls.username}
             label={t`Username`}
+            autoFocus
           />
+          <Show when={group.controls.username.value.length < 2}>
+            <Text class="label">
+              <Trans>Username must be at least 2 characters.</Trans>
+            </Text>
+          </Show>
         </Column>
       </form>
     </Dialog>

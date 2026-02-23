@@ -1,4 +1,4 @@
-import { createEffect, onCleanup, onMount } from "solid-js";
+import { createEffect, onCleanup } from "solid-js";
 
 import { useLingui } from "@lingui-solid/solid/macro";
 import {
@@ -16,6 +16,38 @@ import { useNavigate, useSmartParams } from "@revolt/routing";
 import { useState } from "@revolt/state";
 
 import { useClient } from ".";
+
+/**
+ * Send a desktop notification using Tauri's native plugin when available,
+ * falling back to the Web Notifications API in browser contexts.
+ * @param title Notification title
+ * @param body Notification body text
+ * @param icon Optional icon URL
+ * @returns The web Notification instance (undefined when using Tauri)
+ */
+async function sendNativeNotification(
+  title: string,
+  body: string | undefined,
+  icon: string | undefined,
+): Promise<Notification | undefined> {
+  // Use the Tauri notification plugin when running inside a Tauri window
+  if (typeof window !== "undefined" && "__TAURI_INTERNALS__" in window) {
+    const { sendNotification } = await import(
+      "@tauri-apps/plugin-notification"
+    );
+    sendNotification({ title, body });
+    return undefined;
+  }
+
+  // Browser fallback
+  const notification = new Notification(title, {
+    icon,
+    body,
+    badge: "/assets/web/android-chrome-512x512.png",
+    silent: true,
+  });
+  return notification;
+}
 
 /**
  * Process and display desktop notifications
@@ -159,25 +191,19 @@ export function NotificationsWorker() {
 
     // todo: play sound
 
+    // Don't continue if desktop notifications are disabled in settings
+    if (!state.settings.getValue("notifications:desktop")) return;
+
     // Don't continue if we don't have notification permissions
     if (Notification.permission !== "granted") return;
 
     console.info(`[notification] ${title} ${icon} ${body}`);
 
-    const notification = new Notification(title!, {
-      icon,
-      // @ts-expect-error this does exist on some platforms
-      image,
-      body,
-      timestamp: message.createdAt,
-      tag: message.channelId,
-      badge: "/assets/web/android-chrome-512x512.png",
-      silent: true,
-    });
-
-    notification.addEventListener("click", () => {
-      window.focus();
-      navigate(message.path);
+    sendNativeNotification(title!, body, icon).then((notification) => {
+      notification?.addEventListener("click", () => {
+        window.focus();
+        navigate(message.path);
+      });
     });
   }
 
@@ -186,29 +212,6 @@ export function NotificationsWorker() {
     onCleanup(() => client().removeListener("messageCreate", onMessage));
   });
 
-  /**
-   * Handle page click to request notifications
-   */
-  function tryRequest() {
-    document.removeEventListener("click", tryRequest);
-
-    if (!localStorage.getItem("denied-notifications")) {
-      Notification.requestPermission().then(
-        (permission) =>
-          permission === "denied" &&
-          localStorage.setItem("denied-notifications", "1"),
-      );
-    }
-  }
-
-  onMount(() => {
-    // don't bother mounting if denied before
-    if (!localStorage.getItem("denied-notifications")) {
-      document.addEventListener("click", tryRequest);
-    }
-  });
-
-  onCleanup(() => document.removeEventListener("click", tryRequest));
 
   return null;
 }

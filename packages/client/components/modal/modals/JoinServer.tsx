@@ -37,9 +37,8 @@ export function JoinServerModal(
       const acceptedInvite = await props.client.api.post(`/invites/${code}`);
       if (acceptedInvite.type === "Server") {
         navigate(`/server/${acceptedInvite.server._id}`);
-      } else {
-        // TODO: group
-        // navigate(`/channel/${result.channels}`);
+      } else if (acceptedInvite.type === "Group") {
+        navigate(`/channel/${acceptedInvite.channel._id}`);
       }
       props.onClose();
     } catch (error) {

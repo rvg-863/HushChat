@@ -81,16 +81,17 @@ export function ClientContext(props: { state: State; children: JSXElement }) {
  * @returns Lifecycle information
  */
 export function useClientLifecycle() {
-  const { login, logout, selectUsername, lifecycle, isLoggedIn, isError } =
-    useContext(clientContext);
+  const controller = useContext(clientContext);
 
   return {
-    login,
-    logout,
-    selectUsername,
-    lifecycle,
-    isLoggedIn,
-    isError,
+    login: controller.login,
+    logout: controller.logout,
+    selectUsername: controller.selectUsername,
+    lifecycle: controller.lifecycle,
+    isLoggedIn: controller.isLoggedIn,
+    isError: controller.isError,
+    /** Lazily read the permanent error so it reflects state at render time */
+    permanentError: () => controller.permanentError,
   };
 }
 

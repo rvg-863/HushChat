@@ -3,6 +3,7 @@ import type { ComponentProps } from "solid-js";
 import type { Badge } from "mdui/components/badge";
 import type { Checkbox } from "mdui/components/checkbox";
 import type { CircularProgress } from "mdui/components/circular-progress";
+import type { LinearProgress } from "mdui/components/linear-progress";
 import type { List } from "mdui/components/list";
 import type { ListItem } from "mdui/components/list-item";
 import type { ListSubheader } from "mdui/components/list-subheader";
@@ -24,6 +25,7 @@ declare module "solid-js" {
 
       "mdui-checkbox": ComponentProps<Checkbox>;
       "mdui-circular-progress": ComponentProps<CircularProgress>;
+      "mdui-linear-progress": ComponentProps<LinearProgress>;
       "mdui-segmented-button": ComponentProps<SegmentedButton>;
       "mdui-segmented-button-group": ComponentProps<SegmentedButtonGroup>;
       "mdui-menu-item": ComponentProps<MenuItem>;

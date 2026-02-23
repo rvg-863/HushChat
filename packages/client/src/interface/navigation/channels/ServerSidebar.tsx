@@ -91,6 +91,7 @@ type OrderingEvent =
  */
 export const ServerSidebar = (props: Props) => {
   const navigate = useNavigate();
+  const state = useState();
 
   // Users can manage certain parts of the server individually, regardless of their ManageServer Permission
   const canManageServer = () =>
@@ -101,17 +102,20 @@ export const ServerSidebar = (props: Props) => {
       "ManagePermissions",
     );
 
-  // TODO: this does not filter visible channels at the moment because the state for categories is not stored anywhere
   /** Gets a list of channels that are currently not hidden inside a closed category */
   const visibleChannels = () =>
-    props.server.orderedChannels.flatMap((category) => category.channels);
+    props.server.orderedChannels.flatMap((category) => {
+      const isOpen = state.layout.getSectionState(category.id, true);
+      if (category.id === "default" || isOpen) {
+        return category.channels;
+      }
+      return category.channels.filter(
+        (channel) => channel.unread || channel.id === props.channelId,
+      );
+    });
 
-  // TODO: when navigating channels, we want to add aria-keyshortcuts={localized-shortcut} to the next/previous channels
-  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-keyshortcuts
-  // TODO: issue warning if nothing is found somehow? warnings can be nicer than flat out not working
-  // TODO: we want it to feel smooth when navigating through channels, so we'll want to select channels immediately but not actually navigate until we're done moving through them
   /** Navigates to the channel offset from the current one, wrapping around if needed */
-  const _navigateChannel = (byOffset: number) => {
+  const navigateChannel = (byOffset: number) => {
     if (props.channelId == null) {
       return;
     }
@@ -132,13 +136,8 @@ export const ServerSidebar = (props: Props) => {
     }
   };
 
-  // todo: I think these cause the infinite hang bug:
-
-  // createKeybind(KeybindAction.NAVIGATION_CHANNEL_UP, () => navigateChannel(-1));
-
-  // createKeybind(KeybindAction.NAVIGATION_CHANNEL_DOWN, () =>
-  //   navigateChannel(1),
-  // );
+  createKeybind(KeybindAction.NAVIGATION_CHANNEL_UP, () => navigateChannel(-1));
+  createKeybind(KeybindAction.NAVIGATION_CHANNEL_DOWN, () => navigateChannel(1));
 
   createKeybind(KeybindAction.CHAT_MARK_SERVER_AS_READ, () => {
     if (props.server.unread) {
@@ -487,6 +486,7 @@ function Entry(
       <Column gap="sm">
         <MenuButton
           use:floating={props.menuGenerator(props.channel)}
+          aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
           size="normal"
           alert={alertState()}
           attention={attentionState()}

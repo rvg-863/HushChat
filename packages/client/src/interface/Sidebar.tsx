@@ -20,7 +20,7 @@ import { HomeSidebar, ServerList, ServerSidebar } from "./navigation";
  */
 export const Sidebar = (props: {
   /**
-   * Menu generator TODO FIXME: remove
+   * Menu generator for server list and conversation items
    */
   menuGenerator: (t: ServerI | Channel) => JSX.Directives["floating"];
 }) => {
@@ -40,8 +40,9 @@ export const Sidebar = (props: {
         unreadConversations={state.ordering
           .orderedConversations(client())
           .filter(
-            // TODO: muting channels
-            (channel) => channel.unread,
+            (channel) =>
+              channel.unread &&
+              !state.notifications.isMuted(channel),
           )}
         user={user()!}
         selectedServer={() => params.server}

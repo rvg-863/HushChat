@@ -189,11 +189,12 @@ export function ReportContentModal(
             </For>
           </Form2.TextField.Select>
 
-          {/* TODO: use TextEditor? */}
           <Form2.TextField
             name="detail"
             control={group.controls.detail}
             label={t`Give us some detail`}
+            multiline
+            rows={4}
           />
         </Column>
       </form>

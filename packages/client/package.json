@@ -90,6 +90,7 @@
     "@stripe/stripe-js": "^7.3.1",
     "@tanstack/solid-query": "^5.76.0",
     "@tauri-apps/api": "^2.5.0",
+    "@tauri-apps/plugin-notification": "^2.0.0",
     "@thisbeyond/solid-dnd": "^0.7.5",
     "color-rgba": "^3.0.0",
     "comma-separated-tokens": "^2.0.3",

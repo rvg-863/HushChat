@@ -22,6 +22,8 @@ import MdClose from "@material-design-icons/svg/outlined/close.svg?component-sol
 import MdDoNotDisturbOn from "@material-design-icons/svg/outlined/do_not_disturb_on.svg?component-solid";
 import MdFace from "@material-design-icons/svg/outlined/face.svg?component-solid";
 import MdMicOff from "@material-design-icons/svg/outlined/mic_off.svg?component-solid";
+import MdHeadsetOff from "@material-design-icons/svg/outlined/headset_off.svg?component-solid";
+import MdPhoneDisabled from "@material-design-icons/svg/outlined/phone_disabled.svg?component-solid";
 import MdPersonAddAlt from "@material-design-icons/svg/outlined/person_add_alt.svg?component-solid";
 import MdPersonRemove from "@material-design-icons/svg/outlined/person_remove.svg?component-solid";
 import MdReport from "@material-design-icons/svg/outlined/report.svg?component-solid";
@@ -228,6 +230,57 @@ export function UserContextMenu(props: {
           <Trans>Mute</Trans>
         </ContextMenuButton>
 
+        {/* Server mute — requires MuteMembers permission and role hierarchy */}
+        <Show
+          when={
+            props.member &&
+            props.member.server?.havePermission("MuteMembers") &&
+            props.member.inferiorTo(props.member.server.member!)
+          }
+        >
+          <ContextMenuButton
+            icon={MdMicOff}
+            onClick={() => props.member!.edit({ mute: !(props.member as any).voice?.muted } as any)}
+            actionSymbol={(props.member as any).voice?.muted ? MdChecked : MdUnchecked}
+          >
+            <Trans>Server Mute</Trans>
+          </ContextMenuButton>
+        </Show>
+
+        {/* Server deafen — requires DeafenMembers permission and role hierarchy */}
+        <Show
+          when={
+            props.member &&
+            props.member.server?.havePermission("DeafenMembers") &&
+            props.member.inferiorTo(props.member.server.member!)
+          }
+        >
+          <ContextMenuButton
+            icon={MdHeadsetOff}
+            onClick={() => props.member!.edit({ deaf: !(props.member as any).voice?.deafened } as any)}
+            actionSymbol={(props.member as any).voice?.deafened ? MdChecked : MdUnchecked}
+          >
+            <Trans>Server Deafen</Trans>
+          </ContextMenuButton>
+        </Show>
+
+        {/* Disconnect from voice — requires MoveMembers permission and role hierarchy */}
+        <Show
+          when={
+            props.member &&
+            props.member.server?.havePermission("MoveMembers") &&
+            props.member.inferiorTo(props.member.server.member!)
+          }
+        >
+          <ContextMenuButton
+            icon={MdPhoneDisabled}
+            destructive
+            onClick={() => props.member!.edit({ channel_id: null } as any)}
+          >
+            <Trans>Disconnect from voice</Trans>
+          </ContextMenuButton>
+        </Show>
+
         <ContextMenuDivider />
       </Show>
 
@@ -349,7 +402,14 @@ export function UserContextMenu(props: {
         <ContextMenuButton icon={MdReport} onClick={reportUser} destructive>
           <Trans>Report user</Trans>
         </ContextMenuButton>
-        {/* TODO: #286 show profile / message */}
+        <ContextMenuButton
+          icon={MdFace}
+          onClick={() =>
+            openModal({ type: "user_profile", user: props.user })
+          }
+        >
+          <Trans>View profile</Trans>
+        </ContextMenuButton>
         <Show when={props.user.relationship === "None" && !props.user.bot}>
           <ContextMenuButton icon={MdPersonAddAlt} onClick={addFriend}>
             <Trans>Add friend</Trans>
@@ -442,8 +502,40 @@ export function floatingUserMenus(
   };
 }
 
+/**
+ * Context menu for webhook messages
+ */
+function WebhookContextMenu(props: { message: Message }) {
+  return (
+    <ContextMenu class="WebhookContextMenu">
+      <Show when={props.message.webhook?.name}>
+        <ContextMenuButton>
+          <Trans>{props.message.webhook!.name}</Trans>
+        </ContextMenuButton>
+        <ContextMenuDivider />
+      </Show>
+      <ContextMenuButton
+        icon={MdBadge}
+        onClick={() =>
+          navigator.clipboard.writeText(props.message.webhook!.id)
+        }
+      >
+        <Trans>Copy webhook ID</Trans>
+      </ContextMenuButton>
+    </ContextMenu>
+  );
+}
+
 export function floatingUserMenusFromMessage(message: Message) {
-  return message.author
-    ? floatingUserMenus(message.author!, message.member, message)
-    : {}; // TODO: webhook menu
+  if (message.author) {
+    return floatingUserMenus(message.author!, message.member, message);
+  }
+  if (message.webhook) {
+    return {
+      contextMenu() {
+        return <WebhookContextMenu message={message} />;
+      },
+    };
+  }
+  return {};
 }

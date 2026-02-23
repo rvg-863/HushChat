@@ -109,9 +109,12 @@ export function floating(element: HTMLElement, accessor: Accessor<Props>) {
   /**
    * Handle click events
    */
-  function onClick() {
-    // TODO: handle shift+click for mention
-    trigger("userCard");
+  function onClick(e: MouseEvent) {
+    if (e.shiftKey && accessor().contextMenu) {
+      trigger("contextMenu", undefined);
+    } else {
+      trigger("userCard");
+    }
   }
 
   /**
@@ -186,9 +189,24 @@ export function floating(element: HTMLElement, accessor: Accessor<Props>) {
             onContextMenu,
           );
 
-          // TODO: iOS events for touch
+          let touchTimer: number | undefined;
+
+          element.addEventListener("touchstart", (e) => {
+            touchTimer = setTimeout(() => {
+              onContextMenu(e as unknown as MouseEvent);
+            }, 500) as unknown as number;
+          }, { passive: true });
+
+          element.addEventListener("touchend", () => {
+            clearTimeout(touchTimer);
+          }, { passive: true });
+
+          element.addEventListener("touchmove", () => {
+            clearTimeout(touchTimer);
+          }, { passive: true });
 
           onCleanup(() => {
+            clearTimeout(touchTimer);
             element.removeEventListener(
               config.contextMenuHandler ?? "contextmenu",
               onContextMenu,

@@ -1,4 +1,6 @@
-import { For, Match, Show, Switch } from "solid-js";
+import "mdui/components/linear-progress.js";
+
+import { Accessor, For, Match, Setter, Show, Switch } from "solid-js";
 
 import { cva } from "styled-system/css";
 import { styled } from "styled-system/jsx";
@@ -25,6 +27,7 @@ interface Props {
   getFile(fileId: string): {
     file: File;
     dataUri?: string;
+    uploadProgress?: [Accessor<number>, Setter<number>];
   };
 
   /**
@@ -106,6 +109,16 @@ export function FileCarousel(props: Props) {
                         <MdCancel {...iconSize(36)} />
                       </Overlay>
                     </PreviewBox>
+                    <Show
+                      when={
+                        file().uploadProgress &&
+                        file().uploadProgress![0]() < 1
+                      }
+                    >
+                      <mdui-linear-progress
+                        value={file().uploadProgress![0]()}
+                      />
+                    </Show>
                     <FileName>
                       <OverflowingText>{file().file.name}</OverflowingText>
                     </FileName>

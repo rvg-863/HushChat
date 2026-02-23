@@ -25,6 +25,7 @@ import { useTime } from "@revolt/i18n";
 import { useState } from "@revolt/state";
 import {
   BlockedMessage,
+  Button,
   ConversationStart,
   Deferred,
   JumpToBottom,
@@ -904,7 +905,20 @@ export function Messages(props: Props) {
               <Show when={atStart()}>
                 <ConversationStart channel={props.channel} />
               </Show>
-              {/* TODO: else show (loading icon) OR (load more) */}
+              <Show when={!atStart()}>
+                <Show
+                  when={fetching() === "upwards" || fetching() === "initial"}
+                  fallback={
+                    <Button variant="text" onClick={caseFetchUpwards}>
+                      Load more
+                    </Button>
+                  }
+                >
+                  <Deferred>
+                    <div aria-label="Loading messages" />
+                  </Deferred>
+                </Show>
+              </Show>
               <For each={messagesWithTail()}>
                 {(entry) => (
                   <Entry
@@ -918,7 +932,13 @@ export function Messages(props: Props) {
                   />
                 )}
               </For>
-              {/* TODO: show (loading icon) OR (load more) */}
+              <Show when={!atEnd()}>
+                <Show when={fetching() === "downwards"}>
+                  <Deferred>
+                    <div aria-label="Loading messages" />
+                  </Deferred>
+                </Show>
+              </Show>
               <Show when={atEnd()}>
                 {props.pendingMessages?.({
                   tail: pendingMessageIsTrailing(),

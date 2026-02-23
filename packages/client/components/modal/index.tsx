@@ -6,6 +6,9 @@ import {
   createContext,
   useContext,
 } from "solid-js";
+
+/** Duration of modal close animation in ms */
+const MODAL_CLOSE_ANIMATION_MS = 300;
 import { SetStoreFunction, createStore } from "solid-js/store";
 
 import type { MFA, MFATicket } from "hushchat.js";
@@ -114,7 +117,7 @@ export class ModalController {
 
     setTimeout(() => {
       this.setModals(this.modals.filter((entry) => entry.id !== id));
-    }, 500); /** FIXME / TODO: set to motion anim time + 100ms */
+    }, MODAL_CLOSE_ANIMATION_MS + 100);
   }
 
   /**

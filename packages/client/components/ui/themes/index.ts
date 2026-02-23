@@ -3,4 +3,4 @@ export {
   createMaterialColourVariables,
   createMduiColourTriplets,
 } from "./materialTheme";
-export { createHushChatWebVariables } from "./hushchatWebTheme";
+export { createHushChatWebVariables } from "./stoatWebTheme";

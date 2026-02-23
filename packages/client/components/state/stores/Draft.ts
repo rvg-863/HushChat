@@ -442,7 +442,8 @@ export class Draft extends AbstractStore<"draft", TypeDraft> {
       const draft = this.get().outbox[channel.id].find(
         (entry) => entry.idempotencyKey === idempotencyKey,
       );
-      // TODO: validation?
+
+      if (!draft || (!draft.content && !draft.files?.length)) return;
 
       this.cancelSend(channel, idempotencyKey);
       this.sendDraft(client, channel, draft!);

@@ -264,8 +264,8 @@ export function Message(props: Props) {
             user
               ? floatingUserMenus(
                   user!,
-                  // TODO: try to fetch on demand member
-                  props.message.server?.getMember(user!.id),
+                  props.message.server?.getMember(user!.id) ??
+                    (props.message.server?.fetchMember(user!.id), undefined),
                 )
               : {}
           }

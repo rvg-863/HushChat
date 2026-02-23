@@ -72,6 +72,24 @@ type PolicyAttentionRequired = [
   () => Promise<void>,
 ];
 
+/**
+ * Map a raw API error type to a user-friendly message.
+ * @param type Raw error type string from the WebSocket
+ * @returns Human-readable error message
+ */
+function friendlyError(type: string): string {
+  switch (type) {
+    case "InvalidSession":
+      return "Your session expired, please log in again.";
+    case "AuthenticationError":
+      return "Authentication failed. Please log in again.";
+    case "InternalError":
+      return "An internal server error occurred. Please try again later.";
+    default:
+      return type;
+  }
+}
+
 class Lifecycle {
   #controller: ClientController;
 
@@ -273,8 +291,10 @@ class Lifecycle {
             this.#enter(State.Onboarding);
             break;
           case TransitionType.PermanentFailure:
+            this.#permanentError = transition.error;
+            this.#enter(State.Error);
+            break;
           case TransitionType.TemporaryFailure:
-            // TODO: relay error
             this.#enter(State.Error);
             break;
         }
@@ -345,7 +365,7 @@ class Lifecycle {
             this.#enter(State.Disconnected);
             break;
           case TransitionType.PermanentFailure:
-            // TODO: relay error
+            this.#permanentError = transition.error;
             this.#enter(State.Error);
             break;
           case TransitionType.Logout:
@@ -370,10 +390,8 @@ class Lifecycle {
 
     if (currentState === this.state()) {
       console.error(
-        "An unhandled transition occurred!",
-        transition,
-        "was received on",
-        currentState,
+        `[lifecycle] Unhandled transition: type="${transition.type}" was received in state="${currentState}". This is a bug — no state change occurred.`,
+        { transition, currentState },
       );
     }
   }
@@ -399,11 +417,9 @@ class Lifecycle {
       case ConnectionState.Disconnected:
         if (this.client.events.lastError) {
           if (this.client.events.lastError.type === "revolt") {
-            // if (this.client.events.lastError.data.type == 'InvalidSession') {
-
             this.transition({
               type: TransitionType.PermanentFailure,
-              error: this.client.events.lastError.data.type,
+              error: friendlyError(this.client.events.lastError.data.type),
             });
 
             break;
@@ -490,6 +506,13 @@ export default class ClientController {
   }
 
   /**
+   * Get the human-readable permanent error message, if any
+   */
+  get permanentError(): string | undefined {
+    return this.lifecycle.permanentError;
+  }
+
+  /**
    * Login given a set of credentials
    * @param credentials Credentials
    */
@@ -556,8 +579,10 @@ export default class ClientController {
     }
 
     if (session.result === "Disabled") {
-      // TODO
-      alert("Account is disabled, run special logic here.");
+      modals.openModal({
+        type: "error",
+        error: "Your account has been disabled. Please contact support.",
+      });
       return;
     }
 

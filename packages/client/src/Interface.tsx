@@ -7,7 +7,7 @@ import { ChannelContextMenu, ServerContextMenu } from "@revolt/app";
 import { MessageCache } from "@revolt/app/interface/channels/text/MessageCache";
 import { Titlebar } from "@revolt/app/interface/desktop/Titlebar";
 import { useClient, useClientLifecycle } from "@revolt/client";
-import { State } from "@revolt/client/Controller";
+import { State, TransitionType } from "@revolt/client/Controller";
 import { NotificationsWorker } from "@revolt/client/NotificationsWorker";
 import { useModals } from "@revolt/modal";
 import { Navigate, useBeforeLeave, useLocation } from "@revolt/routing";
@@ -24,7 +24,7 @@ const Interface = (props: { children: JSX.Element }) => {
   const state = useState();
   const client = useClient();
   const { openModal } = useModals();
-  const { isLoggedIn, lifecycle } = useClientLifecycle();
+  const { isLoggedIn, isError, permanentError, lifecycle } = useClientLifecycle();
   const { pathname } = useLocation();
 
   useBeforeLeave((e) => {
@@ -68,6 +68,9 @@ const Interface = (props: { children: JSX.Element }) => {
       >
         <Titlebar />
         <Switch fallback={<CircularProgress />}>
+          <Match when={isError()}>
+            <ErrorScreen message={permanentError()} />
+          </Match>
           <Match when={!isLoggedIn()}>
             <Navigate href="/login" />
           </Match>
@@ -157,5 +160,43 @@ const Content = styled("div", {
     },
   },
 });
+
+/**
+ * Fullscreen error screen shown when a permanent connection error occurs
+ */
+function ErrorScreen(props: { message?: string }) {
+  const { lifecycle } = useClientLifecycle();
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        "flex-direction": "column",
+        "align-items": "center",
+        "justify-content": "center",
+        height: "100%",
+        gap: "16px",
+        padding: "24px",
+        "text-align": "center",
+        color: "var(--md-sys-color-on-surface)",
+        background: "var(--md-sys-color-surface)",
+      }}
+    >
+      <div style={{ "font-size": "1.25rem", "font-weight": "600" }}>
+        Connection Error
+      </div>
+      <div style={{ "max-width": "400px" }}>
+        {props.message ?? "An unexpected error occurred."}
+      </div>
+      <button
+        onClick={() =>
+          lifecycle.transition({ type: TransitionType.Dismiss })
+        }
+      >
+        Return to login
+      </button>
+    </div>
+  );
+}
 
 export default Interface;

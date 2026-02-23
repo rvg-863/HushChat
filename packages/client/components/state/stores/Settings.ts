@@ -10,33 +10,24 @@ import { AbstractStore } from ".";
 interface SettingsDefinition {
   /**
    * Whether to enable desktop notifications
-   * HushChat will try to get notification permission after login if it doesn't already.
-   * TODO: implement
+   * HushChat will request notification permission after login if enabled.
    */
-  // "notifications:desktop": boolean;
+  "notifications:desktop": boolean;
 
   /**
    * Customise notification sounds
-   * TODO: implement
    */
-  // "notifications:sounds": SoundOptions;
+  "notifications:sounds": boolean;
 
   /**
    * Selected unicode emoji
    */
   "appearance:unicode_emoji": UnicodeEmojiPacks;
 
-  // TODO: this should be part of theme
-  // "appearance:ligatures": boolean;
-
   /**
-   * Enable season effects
-   * TODO: implement
+   * Enable seasonal visual effects
    */
-  // "appearance:seasonal": boolean;
-
-  // TODO: this should be part of theme
-  // "appearance:transparency": boolean;
+  "appearance:seasonal": boolean;
 
   /**
    * Show message send button
@@ -49,10 +40,9 @@ interface SettingsDefinition {
   "appearance:compact_mode": boolean;
 
   /**
-   * Indicate new users to HushChat
-   * TODO: implement
+   * Show a badge indicating new users to HushChat based on account age
    */
-  // "appearance:show_account_age": boolean;
+  "appearance:show_account_age": boolean;
 
   /**
    * Whether to include 'copy ID' in context menus
@@ -89,9 +79,13 @@ type ValueType<T extends keyof SettingsDefinition> =
  * If we cannot validate the value as a primitive, clean it up using a function.
  */
 const EXPECTED_TYPES: { [K in keyof SettingsDefinition]: ValueType<K> } = {
+  "notifications:desktop": "boolean",
+  "notifications:sounds": "boolean",
   "appearance:unicode_emoji": "string",
+  "appearance:seasonal": "boolean",
   "appearance:show_send_button": "boolean",
   "appearance:compact_mode": "boolean",
+  "appearance:show_account_age": "boolean",
   "advanced:copy_id": "boolean",
   "advanced:admin_panel": "boolean",
   "changelog:last_index": "number",
@@ -131,9 +125,13 @@ export class Settings extends AbstractStore<"settings", TypeSettings> {
    */
   default(): TypeSettings {
     return {
+      "notifications:desktop": false,
+      "notifications:sounds": true,
       "appearance:unicode_emoji": "fluent-3d",
+      "appearance:seasonal": true,
       "appearance:show_send_button": true,
       "appearance:compact_mode": false,
+      "appearance:show_account_age": true,
       "advanced:copy_id": false,
       "advanced:admin_panel": false,
     };

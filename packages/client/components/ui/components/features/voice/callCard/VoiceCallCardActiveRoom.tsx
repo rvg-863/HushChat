@@ -1,4 +1,4 @@
-import { Match, Show, Switch } from "solid-js";
+import { Match, Show, Switch, createSignal } from "solid-js";
 import {
   TrackLoop,
   TrackReference,
@@ -19,7 +19,7 @@ import { styled } from "styled-system/jsx";
 import { UserContextMenu } from "@revolt/app";
 import { useUser } from "@revolt/markdown/users";
 import { InRoom } from "@revolt/rtc";
-import { Avatar } from "@revolt/ui/components/design";
+import { Avatar, IconButton } from "@revolt/ui/components/design";
 import { OverflowingText } from "@revolt/ui/components/utils";
 import { Symbol } from "@revolt/ui/components/utils/Symbol";
 
@@ -69,10 +69,12 @@ const Call = styled("div", {
 });
 
 /**
- * Show a grid of participants
+ * Show a grid of participants, with an optional video-only filter
  */
 function Participants() {
-  const tracks = useTracks(
+  const [showVideoOnly, setShowVideoOnly] = createSignal(false);
+
+  const allTracks = useTracks(
     [
       { source: Track.Source.Camera, withPlaceholder: true },
       { source: Track.Source.ScreenShare, withPlaceholder: false },
@@ -80,17 +82,45 @@ function Participants() {
     { onlySubscribed: false },
   );
 
+  /**
+   * Filtered tracks: when video-only mode is active, hide audio-only placeholders
+   */
+  const visible = () =>
+    showVideoOnly()
+      ? allTracks().filter(
+          (t) => t.publication !== undefined || t.source === Track.Source.ScreenShare,
+        )
+      : allTracks();
+
   return (
-    <Grid>
-      <TrackLoop tracks={tracks}>{() => <ParticipantTile />}</TrackLoop>
-      {/* <div class={tile()} />
-      <div class={tile()} />
-      <div class={tile()} />
-      <div class={tile()} />
-      <div class={tile()} /> */}
-    </Grid>
+    <>
+      <FilterBar>
+        <IconButton
+          variant={showVideoOnly() ? "filled" : "tonal"}
+          size="xs"
+          onPress={() => setShowVideoOnly((v) => !v)}
+          use:floating={{
+            tooltip: { placement: "top", content: "Show video only" },
+          }}
+        >
+          <Symbol>videocam</Symbol>
+        </IconButton>
+      </FilterBar>
+      <Grid>
+        <TrackLoop tracks={visible()}>{() => <ParticipantTile />}</TrackLoop>
+      </Grid>
+    </>
   );
 }
+
+const FilterBar = styled("div", {
+  base: {
+    display: "flex",
+    justifyContent: "flex-end",
+    padding: "0 var(--gap-md)",
+    paddingBottom: "var(--gap-sm)",
+  },
+});
 
 const Grid = styled("div", {
   base: {

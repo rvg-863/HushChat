@@ -1,4 +1,7 @@
+import "mdui/components/snackbar.js";
+
 import { Trans } from "@lingui-solid/solid/macro";
+import { snackbar } from "mdui";
 
 import { CONFIGURATION } from "@revolt/common";
 import { useNavigate } from "@revolt/routing";
@@ -34,13 +37,18 @@ export default function FlowCreate() {
       captcha,
     });
 
-    // FIXME: should tell client if email was sent
-    //        or if email even needs to be confirmed
-
-    // TODO: log straight in if no email confirmation?
-
-    setFlowCheckEmail(email);
-    navigate("/login/check", { replace: true });
+    const config = await api.get("/");
+    if (!config.features.email) {
+      snackbar({
+        message: "Account created! You can now log in.",
+        closeable: true,
+        timeout: 4000,
+      });
+      navigate("/login", { replace: true });
+    } else {
+      setFlowCheckEmail(email);
+      navigate("/login/check", { replace: true });
+    }
   }
 
   return (

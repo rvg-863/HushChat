@@ -1,4 +1,4 @@
-import { Accessor, Show } from "solid-js";
+import { Accessor, Show, onCleanup, onMount } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
 import { css } from "styled-system/css";
@@ -34,7 +34,13 @@ interface Props {
  * Component indicating to user there were new messages in chat
  */
 export function NewMessages(props: Props) {
-  // TODO: hook escape button
+  onMount(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") props.dismiss();
+    }
+    document.addEventListener("keydown", onKeyDown);
+    onCleanup(() => document.removeEventListener("keydown", onKeyDown));
+  });
 
   const dayjs = useTime();
 

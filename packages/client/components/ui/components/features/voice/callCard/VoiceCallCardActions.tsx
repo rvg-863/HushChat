@@ -1,6 +1,5 @@
 import { Show } from "solid-js";
 
-import { useLingui } from "@lingui-solid/solid/macro";
 import { styled } from "styled-system/jsx";
 
 import { useVoice } from "@revolt/rtc";
@@ -9,7 +8,6 @@ import { Symbol } from "@revolt/ui/components/utils/Symbol";
 
 export function VoiceCallCardActions(props: { size: "xs" | "sm" }) {
   const voice = useVoice();
-  const { t } = useLingui();
 
   return (
     <Actions>
@@ -61,29 +59,27 @@ export function VoiceCallCardActions(props: { size: "xs" | "sm" }) {
       </IconButton>
       <IconButton
         size={props.size}
-        variant={"tonal"}
-        use:floating={{
-          tooltip: {
-            placement: "top",
-            content: "Coming soon! 👀",
-          },
-        }}
-        isDisabled
+        variant={voice.video() ? "filled" : "tonal"}
+        onPress={() => voice.toggleCamera()}
       >
-        <Symbol>camera_video</Symbol>
+        <Show
+          when={voice.video()}
+          fallback={<Symbol>camera_video</Symbol>}
+        >
+          <Symbol>videocam_off</Symbol>
+        </Show>
       </IconButton>
       <IconButton
         size={props.size}
-        variant={"tonal"}
-        use:floating={{
-          tooltip: {
-            placement: "top",
-            content: "Coming soon! 👀",
-          },
-        }}
-        isDisabled
+        variant={voice.screenshare() ? "filled" : "tonal"}
+        onPress={() => voice.toggleScreenshare()}
       >
-        <Symbol>screen_share</Symbol>
+        <Show
+          when={voice.screenshare()}
+          fallback={<Symbol>screen_share</Symbol>}
+        >
+          <Symbol>stop_screen_share</Symbol>
+        </Show>
       </IconButton>
       <Button
         size={props.size}
